@@ -1,0 +1,4 @@
+
+https://www.tutorialspoint.com/c_standard_library/time_h.htm
+https://www.ibm.com/docs/en/i/7.4?topic=functions-gmtime-r-convert-time-restartable
+

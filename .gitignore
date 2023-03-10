@@ -1,0 +1,21 @@
+# Ignore everything and then include folders and files with extensions
+*
+!/**/
+!*.*
+!##*
+
+# Exclude folders
+.bmx/
+.vscode/
+
+# Exclude files
+*.bak
+*.debug
+*.exe
+*.app
+*.a
+*.i
+*.i2
+
+
+
