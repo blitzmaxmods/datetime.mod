@@ -5,7 +5,7 @@
 
 SuperStrict
 
-'Module bmx.datetime
+Module bmx.datetime
 
 Framework pub.stdc		' strftime_(), putenv_%( str$ ), getenv_$( env$ )
 Import brl.blitz		' TRuntimeException
@@ -79,7 +79,7 @@ Const DT_DAYS:Int    = DT_HOURS*24
 ' DateTime structure
 Struct DateTime
 	' Do not change the order of these field, they match "Struct tm" in C
-	Field _second:Int	' 0-59
+	Field _second:Int	' 0-61	* To allow for leap seconds
 	Field _minute:Int	' 0-59
 	Field _hour:Int		' 0-23
 	Field _day:Int		' 1-31, Day of the month
@@ -88,6 +88,8 @@ Struct DateTime
 	Field _weekday:Int	' 0-6
 	Field _yearday:Int	' 0-366
 	Field _dst:Int		' daylight saving time 0=Not in effect, +ve=In effect, -ve=Unknown
+	Field _gmtoff:Long	' glibc addition = Time zone used to compute
+	Field _tmzone:Byte[256]
 
 	' Create a new blank DateTime
 	Method New()
@@ -269,7 +271,7 @@ Struct DateTime
 		Return timestamp_diff( start, finish )
 	End Function
 
-EndStruct
+End Struct
 
 Type TDateTimeError Extends TRuntimeException
 End Type

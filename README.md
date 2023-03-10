@@ -1,14 +1,9 @@
 # Blitzmax DateTime module
 VERSION 0.1
 
-# EXPERIMENTAL #
-Please do not log issues with this module as it is in a pre-relase state
-
 ## Installation
 
 Copy datetime.mod into BlitzMax/mod/bmx.mod/
-
-This modules is designed to be installed using the Blitzmax Installer - LINK required
 
 ## Date basics
 
