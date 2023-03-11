@@ -2,14 +2,14 @@
 VERSION 0.1 - BETA
 
 # SANDBOX
-This should be a link to the [README][0] and this should be a link to the [DateTime][1] mdoule.
+This should be a link to the [README][0] and this should be a link to the [DateTime][two] mdoule.
 
 ## Further Reading
 * [bmx.datetime][0]
-* [Struct DateTime][1]
+* [Struct DateTime][two]
 
 [0]: README.md "DateTime Module"
-[1]: https://github.com/blitzmaxmods/datetime.mod/docs/DateTime.md "Struct DateTime"
+[two]: https://github.com/blitzmaxmods/datetime.mod/docs/DateTime.md "Struct DateTime"
 
 
 **NOTE**
