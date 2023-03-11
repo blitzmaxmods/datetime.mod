@@ -90,10 +90,10 @@ This is a struct that matches the C datatype "tm" but has been extended with fun
 
 # API Reference
 
-**[Struct DateTime][DateTime]**
+**Struct [DateTime][DateTime]**
 * [Function DateTime.now()][DateTime.now]
 * [Method new()][DateTime.new]
 
-[DateTime]: https://github.com/blitzmaxmods/datetime.mod/docs/DateTime.md "Struct DateTime"
-[DateTime.now]: https://github.com/blitzmaxmods/datetime.mod/docs/DateTime_now.md
+[DateTime]: (docs/DateTime.md) "Struct DateTime"
+[DateTime.now]: (docs/DateTime_now.md) "DateTime.now()"
 [DateTime.new]: https://github.com/blitzmaxmods/datetime.mod/docs/DateTime_new.md
