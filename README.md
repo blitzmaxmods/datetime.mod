@@ -1,6 +1,17 @@
 # Blitzmax DateTime Module
 VERSION 0.1 - BETA
 
+# SANDBOX
+This should be a link to the [README][0] and this should be a link to the [DateTime][1] mdoule.
+
+## Further Reading
+* [bmx.datetime][0]
+* [Struct DateTime][1]
+
+[0]: README.md "DateTime Module"
+[1]: https://github.com/blitzmaxmods/datetime.mod/docs/DateTime.md "Struct DateTime"
+
+
 **NOTE**
 
 This version is a beta release and although it may be functionally complete it may not have been thorougly tested and coule contain bugs.
@@ -65,3 +76,4 @@ This is a struct that matches the C datatype "tm" but has been extended with fun
 14 FEB 2023  V0.00  Draft
 09 MAR 2023  V0.01  Draft
 10 MAR 2023  V0.10  Beta   Fixed issue in tm structure giving stack and segmentation faults.
+
