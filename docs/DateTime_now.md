@@ -5,13 +5,13 @@
 
 ## Description
 
-[DateTime][2].now() is a static function of the [DateTime][2] Struct and returns the number of seconds since the Unix Epoch (1 Jan 1970). It is commonly refererred to as UnixTime or a Unix Timestamp.
+DateTime.now() is a static function of the Struct [DateTime](DateTime.md) and returns the number of seconds since the Unix Epoch (1 Jan 1970). It is commonly refererred to as UnixTime or a Unix Timestamp.
 
 ## Return Value
-[DateTime][2].now() returns a signed Long
+DateTime.now() returns a signed Long
 
 ## Dependencies
-* [BlitzMaxNG][0]
+* [BlitzMaxNG](https://blitzmax.org)
 
 ## Threadsafe
 Has not been evaluated
@@ -24,9 +24,6 @@ Local time:Long = DateTime.now()
 ```
 
 ## Further Reading
-* Module [bmx.datetime][1]
-* [Struct DateTime][2]
-
-[0]: https://blitzmax.org "BlitzMaxNG"
-[1]: README.md "bmx.datetime"
-[2]: https://github.com/blitzmaxmods/datetime.mod/docs/DateTime.md "Struct DateTime"
+* [BlitzMaxNG](https://blitzmax.org)
+* Module [bmx.datetime](../README.md)
+* Struct [DateTime](DateTime.md)
