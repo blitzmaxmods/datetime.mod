@@ -19,8 +19,16 @@ Print today.tobin()
 Print "YYYYYYYY.YYYYYYYY.ooooMMMM.dqqDDDDD.xxxxxxxx.xxxHHHHH.xxMMMMMM.xxSSSSSS"
 Print today.reveal()
 Print "DD-MM-YYYY HH:MM:SS"
-Print "TIMESTAMP:      "+today.timestamp()
 
+Print "~nBACKCHECK TEST:"
+Local timestamp:Long = today.timestamp()
+Print "TIMESTAMP:      "+timestamp
+Print "- "+ ["##FAILURE##","**SUCCESS**"][ timestamp = now ]
+Local backcheck:DateTime = New Datetime( timestamp )
+Print backcheck.tobin()
+Print "YYYYYYYY.YYYYYYYY.ooooMMMM.dqqDDDDD.xxxxxxxx.xxxHHHHH.xxMMMMMM.xxSSSSSS"
+Print backcheck.reveal()
+Print "DD-MM-YYYY HH:MM:SS"
 
 DebugStop
 Print "DT_DATE:        "+today.format(DT_DATE)

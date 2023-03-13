@@ -19,7 +19,7 @@ Field bmxdatetime:Long is used internally to hold date information. It is NOT th
 
 bmxtime using binary nibble notation:
 
-```YYYYYYYY.YYYYYYYY.ooooMMMM.dqqDDDDD.xxxxxxxx.xxxHHHHH.xxMMMMMM.xxSSSSSS```
+```YYYYYYYY.YYYYYYYY.ooooMMMM.dqqDDDDD.xxxxxxxx.ttxHHHHH.xxMMMMMM.xxSSSSSS```
 
 This gives us a total date range of +/-32768 years around the Epoch of 1 JAN 4713 BCE which should be more than enough.
 The Date or Time can be extracted as an Int and used on their own if required.
@@ -34,6 +34,7 @@ Where:
 * o - Options (RESERVED)
 * q - Quarter (RESERVED)
 * d - Double Dating
+* t - Daylight Saving Time (DST)
 * x - Not used
 
 **Options:**
@@ -67,6 +68,15 @@ This field requires that the month field be 0
 Dates between 1 Jan and 24 Mar are often recorded using a mechanism called "Double Dating". This is required when the Julian Calendar, which starts on 25 March is used.
 
 The Gregorian calendar was accepted at different times by various countries between Oct 1522 (Venice) and Sep 1752 (England) when the first day of the year was changed to 1 Jan.
+
+**Daylight Saving Time**
+These bits identify is DST is used (valid) and applied to the time.
+the bit bit is used for validity.
+
+0x00    - Daylight saving is valid but not applied  (isdst = 0) 
+0x01    - Daylight saving is valid and is applied   (isdst > 0)
+0x10    - n/a
+0x11    - Daylist saving is invalid or unknown      (isdst < 0)
 
 ## Example
 ```

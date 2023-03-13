@@ -45,7 +45,8 @@ double Milli(void) {
 BBLONG timestamp_now() {
 	time_t timestamp = time( NULL );					// Threadsafe
 	struct tm timeinfo;
-	localtime_r( &timestamp, &timeinfo );				// Threadsafe
+//	localtime_r( &timestamp, &timeinfo );				// Threadsafe
+	gmtime_r( &timestamp, &timeinfo );					// Threadsafe
 	return mktime( &timeinfo );							// Threadsafe
 };
 
@@ -93,44 +94,53 @@ typedef union overlap_s {
     //int8_t   s08[8];	// Not used 
 } overlap_t;
 
-// TIMESTAMP to BMXDATETIME
-// Introduced in V0.2
+//	V0.2, TIMESTAMP to BMXDATETIME
 void timestamp_to_bmxdatetime( BBLONG timestamp, overlap_t *bmxdatetime ) {
 
-	// TIMESTAMP to STRUCT tm
 	struct tm timeinfo;
-//	localtime_r( &timestamp, timeinfo );				// Threadsafe
+//	localtime_r( &timestamp, &timeinfo );				// Threadsafe
 	gmtime_r( &timestamp, &timeinfo );					// Threadsafe
 	
-	// STRUCT tm to BMXDATETIME
+	uint8_t dst;
+	if( timeinfo.tm_isdst == 0 ) {
+		dst = 0x00;
+	} else if( timeinfo.tm_isdst > 0 ) {
+		dst = 0x40;
+	} else {
+		dst = 0xC0;
+	};
 	bmxdatetime->u64    = 0;	
 	bmxdatetime->s16[0] = timeinfo.tm_year;
 	bmxdatetime->u08[2] = timeinfo.tm_mon+1;
 	bmxdatetime->u08[3] = timeinfo.tm_mday;
-	bmxdatetime->u08[5] = timeinfo.tm_hour;
+	bmxdatetime->u08[5] = timeinfo.tm_hour | dst;
 	bmxdatetime->u08[6] = timeinfo.tm_min;
 	bmxdatetime->u08[7] = timeinfo.tm_sec;
 };
 
-// BMAXDATETIME TO TIMESTAMP
+//	V0.2, BMAXDATETIME TO TIMESTAMP
 BBLONG bmxdatetime_to_timestamp( overlap_t *bmxdatetime ) {
 
-	// BMAXDATETIME to STRUCT tm
 	struct tm timeinfo;
-	timeinfo.tm_year = bmxdatetime->s16[0];
-	if( bmxdatetime->u08[2] && 0x0f > 0 ) {
-		timeinfo.tm_mon = ( bmxdatetime->u08[2] && 0x0f ) -1;
+	
+	timeinfo.tm_year = bmxdatetime->s16[0];	
+	if( bmxdatetime->u08[2] & 0x0f > 0 ) {
+		timeinfo.tm_mon = ( bmxdatetime->u08[2] & 0x0f ) -1;
 	};
-	timeinfo.tm_mday = bmxdatetime->u08[3] && 0x1f;
-	timeinfo.tm_hour = bmxdatetime->u08[5];
+	timeinfo.tm_mday = bmxdatetime->u08[3] & 0x1f;
+	timeinfo.tm_hour = bmxdatetime->u08[5] & 0x1f;
 	timeinfo.tm_min = bmxdatetime->u08[6];
 	timeinfo.tm_sec = bmxdatetime->u08[7];
+
+	uint8_t dst = bmxdatetime->u08[5] & 0xc0;
+	if( dst == 0xc0 ) {
+		timeinfo.tm_isdst = -1;
+	} else {
+		timeinfo.tm_isdst = dst >> 6;
+	};
+
+	return mktime( &timeinfo );							// Threadsafe
 	
-	// STRUCT tm to TIMESTAMP
-	time_t timestamp;
-	gmtime_r( &timestamp, &timeinfo );					// Threadsafe
-	
-	return timestamp;
 };
 
 

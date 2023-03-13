@@ -117,7 +117,7 @@ Struct DateTime
 		minute = (Byte Ptr(Bmxdatetime)[6]) & $3F
 		second = (Byte Ptr(Bmxdatetime)[7]) & $3F
 	End Method
-	Method setDate:DateTime( year:Int, month:Int=0, day:Int=0, hour:Int=0, minute:Int=0, second:Int=0 )
+	Method setDate:DateTime( year:Int, month:Int=0, day:Int=0, hour:Int=0, minute:Int=0, second:Int=0, daylightSavingTime:Int=1 )
 		If month<0 Or month>12; Throw New TDateTimeError( "Invalid Month '"+month+"'" )
 		If day<1 Or day>31; Throw New TDateTimeError( "Invalid Day '"+day+"'" )
 		If hour<0 Or hour>24; Throw New TDateTimeError( "Invalid Hour '"+hour+"'" )
@@ -126,7 +126,7 @@ Struct DateTime
 		Int Ptr(bmxdatetime)[0]  = Int(year)
 		Byte Ptr(bmxdatetime)[2] = ( Byte Ptr(bmxdatetime)[2] & $F0 ) | Byte( month ) & $0F	
 		Byte Ptr(bmxdatetime)[3] = ( Byte Ptr(bmxdatetime)[3] & $E0 ) | Byte( day ) & $1F
-		Byte Ptr(bmxdatetime)[5] = Byte( hour )
+		_sethour( hour, daylightSavingTime )
 		Byte Ptr(bmxdatetime)[6] = Byte( minute )
 		Byte Ptr(bmxdatetime)[7] = Byte( second )
 		' Zero the quarter and datedouble flags
@@ -141,11 +141,11 @@ Struct DateTime
 		second = (Byte Ptr(Bmxdatetime)[7]) & $3F
 	End Method
 	' Note second allows for up to 2x extra leap seconds
-	Method setTime:DateTime( hour:Int, minute:Int, second:Int )
+	Method setTime:DateTime( hour:Int, minute:Int, second:Int, daylightSavingTime:Int=1 )
 		If hour<0 Or hour>=24; Throw New TDateTimeError( "Invalid Hour '"+hour+"'" )
 		If minute<0 Or minute>60; Throw New TDateTimeError( "Invalid Minute '"+minute+"'" )
 		If second<0 Or second>=62; Throw New TDateTimeError( "Invalid Second '"+second+"'" )
-		Byte Ptr(bmxdatetime)[5] = Byte( hour )
+		_sethour( hour, daylightSavingTime )
 		Byte Ptr(bmxdatetime)[6] = Byte( minute )
 		Byte Ptr(bmxdatetime)[7] = Byte( second )
 		Return Self
@@ -197,11 +197,23 @@ Struct DateTime
 	Method hour:Int()
 		Return (Byte Ptr(Bmxdatetime)[5]) & $1F
 	End Method
-	Method hour(value:Int)
-		If value<0 Or value>=60; Throw New TDateTimeError( "Invalid Hour '"+value+"'" )
-		Byte Ptr(bmxdatetime)[5] = Byte( value )
+	Method hour(value:Int, daylightSavingTime:Int=1)
+		_sethour( value, daylightSavingTime )
 	End Method
-
+	Method _sethour( value:Int, daylightSavingTime:Int=1 )
+		If value<0 Or value>=60; Throw New TDateTimeError( "Invalid Hour '"+value+"'" )
+		Local dst:Byte
+		If daylightSavingTime = 0
+			dst = $40
+		ElseIf daylightSavingTime > 0
+			dst = $80
+		Else
+			dst = $c0
+		End If
+		Byte Ptr(bmxdatetime)[5] = ( Byte Ptr(bmxdatetime)[5] & $3F ) | Byte( dst ) & $E0		' DST
+		Byte Ptr(bmxdatetime)[5] = ( Byte Ptr(bmxdatetime)[5] & $E0 ) | Byte( value ) & $1F		' HOUR
+	End Method
+	
 	Method minute:Int()
 		Return (Byte Ptr(Bmxdatetime)[6]) & $3F
 	End Method
@@ -250,8 +262,18 @@ Struct DateTime
 		Return ((Byte Ptr(Bmxdatetime)[2]) & $0F ) = $00
 	End Method
 
-'	Method isDSTValid:Int();Return _dst>=0;		End Method	' Is DST known
-'	Method isDST:Int();		Return _dst>0;		End Method	' If Valid, in operation?
+	' Is DST known
+	Method isDSTValid:Int()
+		Return ((Byte Ptr(Bmxdatetime)[5]) & $80 ) = $00
+	End Method
+	
+	' If DST is valid, is it in operation?
+	Method isDST:Int()
+		If ((Byte Ptr(Bmxdatetime)[5]) & $80 ) = $00
+			Return ((Byte Ptr(Bmxdatetime)[5]) & $40 ) = $40
+		EndIf
+		Return False
+	End Method	
 	
 	' Add a predefined interval
 	Method addInterval( quantity:Int, interval:Int )
